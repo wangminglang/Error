@@ -84,7 +84,7 @@
     </div>
       <script language="javascript" type="text/javascript">
           function error_logs() {
-            window.location.href="http://log.analysis.shoujikanbing.com:2501/log/error_logs.php"; 
+            window.location.href="http://log.analysis.shoujikanbing.com:2501/log/logError/error_logs.php"; 
           }
       </script>
   </body>

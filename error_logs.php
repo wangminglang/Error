@@ -88,7 +88,7 @@
     </div>
       <script language="javascript" type="text/javascript">
           function error_details() {
-            window.location.href="http://log.analysis.shoujikanbing.com:2501/log/error_details.php"; 
+            window.location.href="http://log.analysis.shoujikanbing.com:2501/log/logError/error_details.php"; 
           }
       </script>
   </body>
