@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-  <head>
+ <head>
     <meta charset="utf-8">
     <?php ini_set('date.timezone','Asia/Shanghai'); ?>
     <h1 align="center">error_details<h1>
@@ -45,8 +45,8 @@
     }
 
     </style>
-  </head>
-  <body>
+ </head>
+ <body>
     <div class="table">
         <div class="row">
             <div>id</div>
@@ -64,9 +64,9 @@
             mysql_query("SET NAMES UTF8");
             $id = $_GET['id'];
             if(trim($id) != ''){
-                $result = mysql_query("SELECT id, logid, errortype, errorurl, errorcode, errordesc, networkenvi, time FROM error_details WHERE logid=$id ORDER BY time DESC");
+                $result = mysql_query("SELECT id, logid, errortype, errorurl, errorcode, errordesc, networkenvi, time FROM error_details WHERE logid=$id ORDER BY time DESC LIMIT 0,20");
             }  else {
-                $result = mysql_query("SELECT id, logid, errortype, errorurl, errorcode, errordesc, networkenvi, time FROM error_details ORDER BY time DESC");
+                $result = mysql_query("SELECT id, logid, errortype, errorurl, errorcode, errordesc, networkenvi, time FROM error_details ORDER BY time DESC LIMIT 0,20");
             }
             $data = array();
             while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
@@ -88,13 +88,15 @@
         <?php endforeach ?>
         <?php mysql_close($con);?>
     </div>
-      <script language="javascript" type="text/javascript">
-          function error_logs() {
-            window.location.href="http://log.analysis.shoujikanbing.com:2501/log/logError/error_logs.php"; 
-          }
-          function error_details() {
-            window.location.href="http://log.analysis.shoujikanbing.com:2501/log/logError/error_details.php"; 
-          }
-      </script>
-  </body>
+    <button class="click" type="button" onclick="">上一页</button>
+    <button class="click" type="button" onclick="">下一页</button>
+        <script language="javascript" type="text/javascript">
+            function error_logs() {
+                window.location.href="http://log.analysis.shoujikanbing.com:2501/log/logError/error_logs.php"; 
+            }
+            function error_details() {
+                window.location.href="http://log.analysis.shoujikanbing.com:2501/log/logError/error_details.php"; 
+            }
+        </script>
+ </body>
 </html>

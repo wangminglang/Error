@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta charset="utf-8">
     <?php ini_set('date.timezone','Asia/Shanghai'); ?>
     <h1 align="center">error_logs<h1>
@@ -44,8 +44,8 @@
     }
 
     </style>
-  </head>
-  <body>
+</head>
+<body>
     <div class="table">
         <div class="row">
             <div>id</div>
@@ -92,10 +92,10 @@
         <?php endforeach ?>
         <?php mysql_close($con);?>
     </div>
-      <script language="javascript" type="text/javascript">
-          function error_details() {
+    <script language="javascript" type="text/javascript">
+        function error_details() {
             window.location.href="http://log.analysis.shoujikanbing.com:2501/log/logError/error_details.php"; 
-          }
-      </script>
-  </body>
+        }
+    </script>
+</body>
 </html>
