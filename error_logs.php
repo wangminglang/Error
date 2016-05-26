@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <!--<meta charset="utf-8">-->
+    <meta charset="utf-8">
     <?php ini_set('date.timezone','Asia/Shanghai'); ?>
     <h1 align="center">error_logs<h1>
     <button class="click" type="button" onclick="error_details()">error_details</button>
@@ -77,8 +77,14 @@
             <?php foreach ($value as $key => $val): ?>
                     <div class="content">
                         <?php if($key == 'time') {
-                        $val = date('Y-m-d H:i:s', $val);}
+                        $val = date('Y-m-d H:i:s', $val);
                             echo $val; 
+                        }elseif ($key == 'id') {
+                        ?>
+                        <a href="http://log.analysis.shoujikanbing.com:2501/log/logError/error_details.php?id=<?php echo $val ?>"><?php echo $val; ?></a>
+                        <?php }else {
+                            echo $val; 
+                        }
                         ?>
                     </div>
             <?php endforeach; ?>

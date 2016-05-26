@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <!--<meta charset="utf-8">-->
+    <meta charset="utf-8">
     <?php ini_set('date.timezone','Asia/Shanghai'); ?>
     <h1 align="center">error_details<h1>
     <button class="click" type="button" onclick="error_logs()">error_logs</button>
+    <button class="click" type="button" onclick="error_details()">error_details</button>
     <style type="text/css">
     body{
         background: #f5f5f5;
@@ -60,8 +61,13 @@
         <?php 
             $con = mysql_connect("127.0.0.1","root","haojia2901");
             mysql_select_db("nh_logs", $con);
-            mysql_query("SET NAMES UTF8"); 
-            $result = mysql_query("SELECT id, logid, errortype, errorurl, errorcode, errordesc, networkenvi, time FROM error_details ORDER BY time DESC");
+            mysql_query("SET NAMES UTF8");
+            $id = $_GET['id'];
+            if(trim($id) != ''){
+                $result = mysql_query("SELECT id, logid, errortype, errorurl, errorcode, errordesc, networkenvi, time FROM error_details WHERE logid=$id ORDER BY time DESC");
+            }  else {
+                $result = mysql_query("SELECT id, logid, errortype, errorurl, errorcode, errordesc, networkenvi, time FROM error_details ORDER BY time DESC");
+            }
             $data = array();
             while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
                 $data[] = $row;
@@ -85,6 +91,9 @@
       <script language="javascript" type="text/javascript">
           function error_logs() {
             window.location.href="http://log.analysis.shoujikanbing.com:2501/log/logError/error_logs.php"; 
+          }
+          function error_details() {
+            window.location.href="http://log.analysis.shoujikanbing.com:2501/log/logError/error_details.php"; 
           }
       </script>
   </body>
