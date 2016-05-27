@@ -25,15 +25,8 @@
         border: 1px solid #D0D0D0;
     }
     .content {
-        display: table-cell;
-        min-width: 70px;
-        height: 50px;
-        text-align: center;
         font-size: 15px;
         font-weight: normal;
-        vertical-align: middle;
-        padding: 5px 10px;
-        border: 1px solid #D0D0D0;
     }
     .click {
         background-color: orange;
