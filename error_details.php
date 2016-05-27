@@ -122,7 +122,6 @@
                         $page = 1;
                     }
                 }
-                $id = $_GET['id'];
                 ?>
                 window.location.href="http://log.analysis.shoujikanbing.com:2501/log/logError/error_details.php?id=<?php echo $id; ?>&page=<?php echo $page; ?>"; 
             }
@@ -136,7 +135,6 @@
                 }else {
                     $page = 0;
                 }
-                $id = $_GET['id'];
                 ?>
                 window.location.href="http://log.analysis.shoujikanbing.com:2501/log/logError/error_details.php?id=<?php echo $id; ?>&page=<?php echo $page; ?>"; 
             }
