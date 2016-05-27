@@ -20,7 +20,7 @@
     }
     .row div {
         display: table-cell;
-        width: 200px;
+        min-width: 70px;
         height: 50px;
         text-align: center;
         vertical-align: middle;
@@ -29,7 +29,7 @@
     }
     .content {
         display: table-cell;
-        width: 200px;
+        min-width: 70px;
         height: 50px;
         text-align: center;
         font-size: 15px;
