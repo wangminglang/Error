@@ -49,27 +49,32 @@
             <td>time</td>
         </tr>
         <?php 
+            $pageSize = 20; 
+            $page = $_GET['page'];
+            if(trim($page) == ''){
+                $page = 1;
+            }
+            $head = ($page - 1) * $pageSize;
             $id = $_GET['id'];
-            $pageData = query($id);
-            function query($id) {
-                $con = mysql_connect("127.0.0.1","root","haojia2901");
-                mysql_select_db("nh_logs", $con);
-                mysql_query("SET NAMES UTF8");
-                if(trim($id) != ''){
-                    $result = mysql_query("SELECT id, logid, errortype, errorurl, errorcode, errordesc, networkenvi, time FROM error_details WHERE logid=$id ORDER BY time DESC");
-                }  else {
-                    $result = mysql_query("SELECT id, logid, errortype, errorurl, errorcode, errordesc, networkenvi, time FROM error_details ORDER BY time DESC");
-                }
-                mysql_close($con);
-                $data = array();
-                while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
-                    $data[] = $row;
-                }
-                return $data;
+            $con = mysql_connect("127.0.0.1","root","haojia2901");
+            mysql_select_db("nh_logs", $con);
+            mysql_query("SET NAMES UTF8");
+            if(trim($id) != ''){
+                $result = mysql_query("SELECT id, logid, errortype, errorurl, errorcode, errordesc, networkenvi, time FROM error_details WHERE logid=$id ORDER BY time DESC LIMIT $head,$pageSize");
+                $resultNum = mysql_query("SELECT * FROM error_details WHERE logid=$id");
+            }  else {
+                $result = mysql_query("SELECT id, logid, errortype, errorurl, errorcode, errordesc, networkenvi, time FROM error_details ORDER BY time DESC LIMIT $head,$pageSize");
+                $resultNum = mysql_query("SELECT * FROM error_details");
+            }
+            mysql_close($con);
+            $data = array();
+            $rowsNum = mysql_num_rows($resultNum);
+            while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+                $data[] = $row;
             }
         ?>
         <tbody id="tableBody">
-        <?php foreach ($pageData as $value): ?>
+        <?php foreach ($data as $value): ?>
         <tr class="row">
             <?php foreach ($value as $key => $val): ?>
                     <td class="content">
@@ -97,88 +102,67 @@
                 window.location.href="http://log.analysis.shoujikanbing.com:2501/log/logError/error_details.php"; 
             }
             
-            var theTable = document.getElementById("tableBody");
-    var totalPage = document.getElementById("spanTotalPage");   
+    var totalPage = document.getElementById("spanTotalPage");
     var pageNum = document.getElementById("spanPageNum");
     var spanPre = document.getElementById("spanPre");   
     var spanNext = document.getElementById("spanNext");   
     var spanFirst = document.getElementById("spanFirst");   
-    var spanLast = document.getElementById("spanLast");   
-    var numberRowsInTable = theTable.rows.length;   
-    var pageSize = 20;   
-    var page = 1;   
-   
+    var spanLast = document.getElementById("spanLast"); 
+    var numberRowsInTable = <?php echo "$rowsNum"; ?>;
+    var pageSize = <?php echo "$pageSize"; ?>;
+    var page = <?php echo "$page"; ?>;
+
+    totalPage.innerHTML = pageCount();
+    pageNum.innerHTML = page;
+    if (numberRowsInTable > (page * pageSize)) {
+        nextLink();
+        lastLink();
+    }
+    if (page > 1) {
+        preLink();
+        firstLink();
+    };
+
     //下一页
     function next() {
-	hideTable();
-	currentRow = page * pageSize;
-	maxRow = currentRow + pageSize;
-	if (maxRow > numberRowsInTable) {
-		maxRow = numberRowsInTable;
-	}
-	for (var i = currentRow; i < maxRow; i++) {
-		theTable.rows[i].style.display = '';
-	}
-	page++;
-	if (maxRow === numberRowsInTable){nextText(); lastText();}
-	showPage();
-	firstLink();
-	preLink();
-}
+        page++;
+        showPage();
+        window.location.href="http://log.analysis.shoujikanbing.com:2501/log/logError/error_details.php?id=<?php echo $id; ?>&page=" + page; 
+        }
+
     //上一页
     function pre() {
-	hideTable();
-	page--;
-	currentRow = page * pageSize;
-	maxRow = currentRow - pageSize;
-	if(currentRow > numberRowsInTable) {currentRow = numberRowsInTable;}
-	for (var i = maxRow; i < currentRow; i++) {
-		theTable.rows[i].style.display = '';
-	}
-	if (maxRow === 0) {firstText(); preText();}
-	showPage();
-	lastLink();
-	nextLink();
-}
-    //首页
-    function first() {
-	hideTable();
-	page = 1;
-	for (var i = 0; i < pageSize; i++) {
-		theTable.rows[i].style.display = '';
-	}
-	showPage();
-	preText();
-	nextLink();
-	lastLink();
-}
-    //尾页
-    function last() {
-	hideTable();
-	page = pageCount();
-	currentRow = (page - 1) * pageSize;
-	for (var i = currentRow; i < numberRowsInTable; i++) {
-		theTable.rows[i].style.display = '';
-	}
-	showPage();
-	nextText();
-	firstLink();
-	preLink();
+        page--;
+        showPage();
+        window.location.href="http://log.analysis.shoujikanbing.com:2501/log/logError/error_details.php?id=<?php echo $id; ?>&page=" + page; 
     }
 
-    function hideTable() {
-	for (var i = 0; i < numberRowsInTable; i++) {
-		theTable.rows[i].style.display = 'none';
-	}
+    //首页
+    function first() {
+        page = 1;
+        showPage();
+        window.location.href="http://log.analysis.shoujikanbing.com:2501/log/logError/error_details.php?id=<?php echo $id; ?>&page=" + page; 
     }
+
+    //尾页
+    function last() {
+        page = pageCount();
+        showPage();
+        window.location.href="http://log.analysis.shoujikanbing.com:2501/log/logError/error_details.php?id=<?php echo $id; ?>&page=" + page; 
+    }
+
+
     function showPage() {
-	pageNum.innerHTML = page;
+        pageNum.innerHTML = page;
     }
+   
+
     function pageCount() {
-	var count = 0;
-	if (numberRowsInTable % pageSize !== 0) {count = 1;}
-	return parseInt(numberRowsInTable/pageSize) + count;
+        var count = 0;
+        if (numberRowsInTable % pageSize !== 0) {count = 1;}
+        return parseInt(numberRowsInTable/pageSize) + count;
     }
+
     //显示链接
     function preLink() {spanPre.innerHTML = "<a href='javascript:pre();'>上一页</a>";}
     function preText() {spanPre.innerHTML = "上一页";}
@@ -189,18 +173,110 @@
     function lastLink() {spanLast.innerHTML = "<a href='javascript:last();'>尾页</a>";}
     function lastText() {spanLast.innerHTML = "尾页";}
 
-    function hide() {
-	for (var i = pageSize; i < numberRowsInTable; i++) {
-		theTable.rows[i].style.display = 'none';
-	}
-	pageNum.innerHTML = '1';
-	totalPage.innerHTML = pageCount();
-        if (numberRowsInTable > pageSize) {
-	nextLink();
-	lastLink();
-	}
-    }
-    hide();  
+//             var theTable = document.getElementById("tableBody");
+//     var totalPage = document.getElementById("spanTotalPage");   
+//     var pageNum = document.getElementById("spanPageNum");
+//     var spanPre = document.getElementById("spanPre");   
+//     var spanNext = document.getElementById("spanNext");   
+//     var spanFirst = document.getElementById("spanFirst");   
+//     var spanLast = document.getElementById("spanLast");   
+//     var numberRowsInTable = theTable.rows.length;   
+//     var pageSize = 20;   
+//     var page = 1;   
+   
+//     //下一页
+//     function next() {
+// 	hideTable();
+// 	currentRow = page * pageSize;
+// 	maxRow = currentRow + pageSize;
+// 	if (maxRow > numberRowsInTable) {
+// 		maxRow = numberRowsInTable;
+// 	}
+// 	for (var i = currentRow; i < maxRow; i++) {
+// 		theTable.rows[i].style.display = '';
+// 	}
+// 	page++;
+// 	if (maxRow === numberRowsInTable){nextText(); lastText();}
+// 	showPage();
+// 	firstLink();
+// 	preLink();
+// }
+//     //上一页
+//     function pre() {
+// 	hideTable();
+// 	page--;
+// 	currentRow = page * pageSize;
+// 	maxRow = currentRow - pageSize;
+// 	if(currentRow > numberRowsInTable) {currentRow = numberRowsInTable;}
+// 	for (var i = maxRow; i < currentRow; i++) {
+// 		theTable.rows[i].style.display = '';
+// 	}
+// 	if (maxRow === 0) {firstText(); preText();}
+// 	showPage();
+// 	lastLink();
+// 	nextLink();
+// }
+//     //首页
+//     function first() {
+// 	hideTable();
+// 	page = 1;
+// 	for (var i = 0; i < pageSize; i++) {
+// 		theTable.rows[i].style.display = '';
+// 	}
+// 	showPage();
+// 	preText();
+// 	nextLink();
+// 	lastLink();
+// }
+//     //尾页
+//     function last() {
+// 	hideTable();
+// 	page = pageCount();
+// 	currentRow = (page - 1) * pageSize;
+// 	for (var i = currentRow; i < numberRowsInTable; i++) {
+// 		theTable.rows[i].style.display = '';
+// 	}
+// 	showPage();
+// 	nextText();
+// 	firstLink();
+// 	preLink();
+//     }
+
+//     function hideTable() {
+// 	for (var i = 0; i < numberRowsInTable; i++) {
+// 		theTable.rows[i].style.display = 'none';
+// 	}
+//     }
+//     function showPage() {
+// 	pageNum.innerHTML = page;
+//     }
+//     function pageCount() {
+// 	var count = 0;
+// 	if (numberRowsInTable % pageSize !== 0) {count = 1;}
+// 	return parseInt(numberRowsInTable/pageSize) + count;
+//     }
+//     //显示链接
+//     function preLink() {spanPre.innerHTML = "<a href='javascript:pre();'>上一页</a>";}
+//     function preText() {spanPre.innerHTML = "上一页";}
+//     function nextLink() {spanNext.innerHTML = "<a href='javascript:next();'>下一页</a>";}
+//     function nextText() {spanNext.innerHTML = "下一页";}
+//     function firstLink() {spanFirst.innerHTML = "<a href='javascript:first();'>首页</a>";}
+//     function firstText() {spanFirst.innerHTML = "首页";}
+//     function lastLink() {spanLast.innerHTML = "<a href='javascript:last();'>尾页</a>";}
+//     function lastText() {spanLast.innerHTML = "尾页";}
+
+//     function hide() {
+// 	for (var i = pageSize; i < numberRowsInTable; i++) {
+// 		theTable.rows[i].style.display = 'none';
+// 	}
+// 	pageNum.innerHTML = '1';
+// 	totalPage.innerHTML = pageCount();
+//         if (numberRowsInTable > pageSize) {
+// 	nextLink();
+// 	lastLink();
+// 	}
+//     }
+//     hide();  
             
 </script>
 
