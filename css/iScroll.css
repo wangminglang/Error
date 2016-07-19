@@ -1,0 +1,66 @@
+#wrapper {
+	position: absolute;
+	z-index: 1;
+	top: 0px;
+	bottom: 0px;
+	left: 0;
+	width: 100%;
+	background: #fff;
+	overflow: hidden;
+}
+
+.pull-up, .pull-down{width: 100%; height: 55px; line-height: 55px; position: absolute;}
+
+.bgAnimation-up, .bgAnimation-down{background-image: url(http://www.w3cmark.com/uploads/35441432120389.png); 
+	background-repeat: no-repeat; width: 60px; margin: 0px auto; height: 100%;}
+.animation{animation: animation 1s steps(5) infinite;
+	-moz-animation: animation 1s steps(5) infinite;	/* Firefox */
+	-webkit-animation: animation 1s steps(5) infinite;	/* Safari 和 Chrome */
+	-o-animation: animation 1s steps(5) infinite;	/* Opera */
+}
+
+@keyframes animation
+{
+	100% {
+       background-position:0 -282px;
+    }
+}
+
+@-moz-keyframes animation /* Firefox */
+{
+	100% {
+       background-position:0 -282px;
+    }
+}
+
+@-webkit-keyframes animation /* Safari 和 Chrome */
+{
+	100% {
+       background-position:0 -282px;
+    }
+}
+
+@-o-keyframes animation /* Opera */
+{
+	100% {
+       background-position:0 -282px;
+    }
+}
+
+ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	width: 100%;
+	text-align: left;
+}
+
+li {
+	padding: 0 10px;
+	height: 40px;
+	line-height: 40px;
+	border-bottom: 1px solid #ccc;
+	border-top: 1px solid #fff;
+	background-color: #fafafa;
+	font-size: 14px;
+}
